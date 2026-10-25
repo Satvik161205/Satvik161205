@@ -1,35 +1,70 @@
+````yaml
 name: Generate Contribution Snake
 
 on:
-schedule:
-- cron: "0 0 * * *"
-workflow_dispatch:
-push:
-branches:
-- main
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-generate:
-runs-on: ubuntu-latest
-timeout-minutes: 10
+  generate:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Generate contribution snake
-    uses: Platane/snk/svg-only@v3
-    with:
-      github_user_name: Satvik161205
-      outputs: |
-        dist/github-contribution-grid-snake.svg
-        dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+    steps:
+      - name: Generate contribution snake
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
-  - name: Publish generated SVG
-    uses: peaceiris/actions-gh-pages@v4
-    with:
-      publish_branch: output
-      publish_dir: dist
-      github_token: ${{ secrets.GITHUB_TOKEN }}
-```
+      - name: Publish to output branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: output
+
+**Important:** Copy the entire YAML code, including the final line. Don't include the Markdown backticks (` ```yaml ` and ` ``` `) in the actual GitHub file.
+
+## Step 3: Save the changes
+
+1. Scroll down to **Commit changes**.
+2. Keep the commit message as `Fix contribution snake workflow`.
+3. Select **Commit directly to the main branch**.
+4. Click **Commit changes**.
+
+## Step 4: Run the workflow again
+
+Open the repository's **Actions** tab:
+
+[Open GitHub Actions](https://github.com/Satvik161205/Satvik161205/actions?utm_source=chatgpt.com)
+
+Then:
+
+1. Select **Generate Contribution Snake**.
+2. Click **Run workflow**.
+3. Select `main`.
+4. Click the green **Run workflow** button.
+
+Wait for the run to finish.
+
+### If it succeeds ✅
+
+Your repository should have a new `output` branch. You can test the generated animation here:
+
+[Preview your contribution snake](https://raw.githubusercontent.com/Satvik161205/Satvik161205/output/github-contribution-grid-snake.svg?utm_source=chatgpt.com)
+
+### If it fails again ❌
+
+Open the failed workflow, click the failed job, and send me a screenshot of the error.
+
+**Let's get the snake working first.** After that, we'll add the animated snake and the other futuristic elements to your GitHub profile README.
+````
